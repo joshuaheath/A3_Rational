@@ -4,4 +4,5 @@ project(A3_Rational)
 set(CMAKE_CXX_STANDARD 20)
 
 add_executable(A3_Rational main.cpp
-        cmake-build-debug/Rational.h)
+        Rational.h
+        Rational.cpp)
