@@ -1,0 +1,37 @@
+# FROM BRIGHTSPACE
+
+# Define a class for rational numbers containing two integers, one for the numerator and one for
+# the denominator. Include four constructors:
+# 1. Default – that initializes the object to 0/1
+# 2. One Argument – for whole numbers e.g. 5 (5 becomes 5/1)
+# 3. Two Argument – for when both numerator and denominator are provided
+# 4. String – for when the number is provided as a string i.e. “-1/2” or “5”
+
+# Overload all the following mathematical operators so that they correctly apply to the type
+# Rational: +, -, *, and / (these will normalize the answers provided)
+
+# Overload all the following comparison operators so that they correctly apply to the type
+# Rational: >, < , == (these will all have Boolean returns).
+
+# Overload the output operator << (only i.e. not the input operator >>) so that it correctly applies to the type Rational.
+
+# Validation will be required to prevent acceptance of decimal numbers or non-numeric entry
+
+# Write a driver that demonstrates the functionality of all constructors and overloaded operators
+  # asked for above one after the other (i.e. do not ask for the operator, just the numbers to be
+  # processed. Make it loop after each calculation is complete.
+
+# FROM RUBRIC
+# 1. Project has validiation
+# 2. Passes tests preformed with the intent of breaking the program
+# 3. UI is fuctional and easy to use
+# 4. Contains a header and cpp file for the 'Rational' Class
+# 5. Contains a default constructor that initializes a 'Rational' object to 0 (aka 0/1)
+# 6. Contains a constructor with params that can be used to set the member variables of a rational object to any legit values
+# 7. A constructor that initializes a Rational object to the rational number ‘whole #/1'
+# 8. A constructor that accepts a string e.g. “-1/3” or a whole number e.g. 5 and creates a rational number
+# 9. Output of math operations must be normalized fractions (1/2 instead of 2/4)
+# 10. Outputs of the all the compare operations (<,>,==) will be a Boolean return when used with a 'Rational' obj
+# 11. Mathmatical operators (+, - , / , *, =) work correctly when uses with a 'Rational' obj
+# 12. Solution includes an overloaded output operator '<<'
+# 13. Driver demos all fuctionality of all constructors and overloaded operators
