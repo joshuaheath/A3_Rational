@@ -35,3 +35,9 @@
 # 11. Mathmatical operators (+, - , / , *, =) work correctly when uses with a 'Rational' obj
 # 12. Solution includes an overloaded output operator '<<'
 # 13. Driver demos all fuctionality of all constructors and overloaded operators
+
+# FLOW OF SOLUTION
+# User inputs entire first fraction (Or whole number) as a string
+# User inputs entire second fraction (Or whole number) as a string
+# Outputs should list all the mathmatical, comparisons and overloaded output operations requriered in the assignment
+# In addition to the above you will also need to code additional domostractuons in oerder to show all fuctionalities
