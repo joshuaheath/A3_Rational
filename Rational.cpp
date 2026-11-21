@@ -14,88 +14,42 @@ using namespace std;
 Rational::Rational()
 {
     cout<<"-- Rational Default constructor -- "<<endl;
-    numerator = 0;
-    denominator = 1;
-    greatestFactor = 1;
-    isPositive = true;
-    isNormalized = true;
-    isWholeNumber = true;
+    set_value(0, 1);
 }
 
 Rational::Rational(int wholeNumber)
 {
     cout<<"-- Rational Whole Number constructor -- "<<endl;
-    numerator = wholeNumber;
-    denominator = 1;
-    greatestFactor = 1;
-    isNormalized = true;
-    isWholeNumber = true;
-
-    if (is_positive_number(wholeNumber))
-    {
-        isPositive = true;
-    } else
-    {
-        isPositive = false;
-    }
+    set_value(wholeNumber, 1);
 }
 
 Rational::Rational(int numer, int denom)
 {
     cout<<"-- Rational Numerator and Denominator constructor -- "<<endl;
-
-    numerator = numer;
-    denominator = denom;
-    isNormalized = false;
-
-    if (is_whole_number(denom))
-    {
-        isWholeNumber = true;
-    } else
-    {
-        isWholeNumber = false;
-    }
-
-    greatestFactor = get_GCF(numer, denom);
-    if (greatestFactor == 1)
-    {
-        isNormalized = true;
-    }
-
-    if (is_rational_num_positive(numer, denom))
-    {
-        isPositive = true;
-    } else
-    {
-        isPositive = false;
-    }
+    set_value(numer, denom);
 }
 
-Rational::Rational(string text)
+Rational::Rational(const string& text)
 {
-    if (!text.find('/') == string::npos)
+    if (!is_valid_number(text))
+    {
+        throw invalid_argument("Invalid number format");
+    }
+    size_t slash = text.find('/');
+
+    // If it cannot find the slash
+    if (slash == string::npos)
     {
         numerator = stoi(text);
         denominator = 1;
-        isNormalized = true;
-        isWholeNumber = true;
-        isPositive = true;
-        if (text.find('-') == string::npos)
-        {
-            isPositive = false;
-        }
-
     }
+    else
+    {
+        int numer = stoi(text.substr(0, slash)); // Everything before the slash
+        int denom = stoi(text.substr(slash + 1)); // Everything after the slash
 
-    stringstream ss(text);
-    string token;
-    //
-    // // Extract tokens separated by commas
-    // for (int i = 0; i < 1; i++)
-    //     getline(ss, token, '/')
-    //     token 
-    // }
-
+        set_value(numer, denom);
+    }
 }
 
 Rational::~Rational()
@@ -106,57 +60,126 @@ Rational::~Rational()
 // ========================================= OVERLOADS ========================================= //
 
 // ========================================= METHODS ========================================= //
-bool Rational::is_dividing_by_zero(const Rational& obj)
+
+void Rational::set_value(const int& numer, const int& denom)
 {
 
-}
-
-bool Rational::is_valid_number(const string& str)
-{
-
-}
-
-bool Rational::is_positive_number(const int& number)
-{
-    if (number >= 0) { return true; } return false;
-}
-
-bool Rational::is_rational_num_positive(const int& numer, const int& denom)
-{
-    if (numer < 0 && denom < 0)
+    if (denom == 0)
     {
-        return true;
+        throw invalid_argument("Denominator cannot be zero");
     }
-    if (numer >= 0 && denom >= 0)
+
+    //Flips to make numerator possitive ans assigns appropriately
+    if (numer > 0 && denom < 0)
     {
-        return true;
+        denominator = abs(denom);
+        numerator = numer * -1;
+    } else if (numer < 0 && denom < 0)
+    {
+        numerator = abs(numer);
+        denominator = abs(denom);
+    } else
+    {
+        numerator = numer;
+        denominator = denom;
     }
-    return false;
 }
 
-bool Rational::is_whole_number(const int& denom)
+bool Rational::is_positive() const
 {
-    if (denom == 0) { return true; } return false;
+    return numerator >= 0;
 }
 
-int Rational::get_GCF(int& numerator, int& denominator)
+bool Rational::is_normalized() const
 {
-    // make both possitive
-    numerator = abs(numerator);
-    denominator = abs(denominator);
+    return (get_GCF(numerator, denominator) == 1);
+}
 
-    while (denominator != 0) {
-        int temp = denominator;
-        denominator = numerator % denominator;
-        numerator = temp;
-    }
-    
-    return numerator;
+bool Rational::is_whole_number() const
+{
+    return (denominator == 1);
 }
 
 void Rational::normalize()
 {
-
+    int greatestFactor = get_GCF(numerator, denominator);
+    if (greatestFactor != 1)
+    {
+        numerator = numerator / greatestFactor;
+        denominator = denominator / greatestFactor;
+    }
 }
+
+bool Rational::is_valid_number(const string& text)
+{
+    size_t slash = text.find('/');
+
+    // if it does not find a /
+    if (slash == string::npos)
+    {
+        return is_integer(text);
+    }
+
+    // only one slash allowed
+    if (text.find('/', slash + 1) != string::npos)
+    {
+        return false;
+    }
+
+    string numer = text.substr(0, slash);
+    string denom = text.substr(slash + 1);
+
+    return is_integer(numer) && is_integer(denom);
+}
+
+bool Rational::is_fraction_input(const string& text)
+{
+    size_t slash = text.find('/');
+
+    return (slash != string::npos);
+}
+
+bool Rational::is_integer(const string& text)
+{
+    if (text.empty())
+        return false;
+
+    try
+    {
+        size_t pos;
+        stoi(text, &pos);
+        return pos == text.size();
+    }
+    catch (...)
+    {
+        return false;
+    }
+}
+
+bool Rational::is_dividing_by_zero(const Rational& r)
+{
+    return (r.denominator == 0);
+}
+
+int Rational::get_greatest_factor() const
+{
+    return (get_GCF(numerator, denominator));
+}
+
+int Rational::get_GCF(int numer, int denom)
+{
+    // make both possitive
+    numer = abs(numer);
+    denom = abs(denom);
+
+    while (denom != 0) {
+        int temp = denom;
+        denom = numer % denom;
+        numer = temp;
+    }
+
+    return numer;
+}
+
 
 
