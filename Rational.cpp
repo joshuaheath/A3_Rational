@@ -58,9 +58,30 @@ Rational::~Rational()
 }
 
 // ========================================= OVERLOADS ========================================= //
+    Rational operator+(const Rational& obj1,const Rational& obj2)
+    {
+        //Gets other obj numerator to be brought upto a same denominator equivalent
+        int scaledNumer2 = obj1.denominator * obj2.numerator;
+
+        // brings upto same denominator equivalent for 'otherNumerator'
+        int scaledNumer1 = obj1.numerator * obj2.denominator;
+        int denom = obj1.denominator * obj2.denominator;
+
+        return Rational(scaledNumer1 + scaledNumer2, denom);
+    }
+    Rational operator-(const Rational& obj1, const Rational& obj2)
+    {
+        //Gets other obj numerator to be brought upto a same denominator equivalent
+        int scaledNumer2 = obj1.denominator * obj2.numerator;
+
+        // brings upto same denominator equivalent for 'otherNumerator'
+        int scaledNumer1 = obj1.numerator * obj2.denominator;
+        int denom = obj1.denominator * obj2.denominator;
+
+        return Rational(scaledNumer1 + scaledNumer2, denom);
+    }
 
 // ========================================= METHODS ========================================= //
-
 void Rational::set_value(const int& numer, const int& denom)
 {
 
