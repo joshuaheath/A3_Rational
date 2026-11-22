@@ -81,6 +81,20 @@ Rational::~Rational()
         return Rational(scaledNumer1 + scaledNumer2, denom);
     }
 
+Rational operator*(const Rational& obj1, const Rational& obj2)
+{
+    return Rational(obj1.numerator * obj2.numerator, obj1.denominator * obj2.denominator);
+}
+
+Rational operator/(const Rational& obj1, const Rational& obj2)
+{
+    if (obj2.numerator == 0)
+    {
+        throw invalid_argument("Denominator cannot be zero: Devision operator");
+    }
+
+    return Rational(obj1 * Rational(obj2.denominator, obj2.numerator));
+}
 // ========================================= METHODS ========================================= //
 void Rational::set_value(const int& numer, const int& denom)
 {
