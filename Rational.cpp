@@ -52,49 +52,81 @@ Rational::Rational(const string& text)
     }
 }
 
-Rational::~Rational()
-{
+    Rational::~Rational()
+    {
 
-}
+    }
 
 // ========================================= OVERLOADS ========================================= //
     Rational operator+(const Rational& obj1,const Rational& obj2)
     {
+        // brings upto same denominator equivalent for 'otherNumerator'
+        int scaledNumer1 = obj1.numerator * obj2.denominator;
+
         //Gets other obj numerator to be brought upto a same denominator equivalent
         int scaledNumer2 = obj1.denominator * obj2.numerator;
 
-        // brings upto same denominator equivalent for 'otherNumerator'
-        int scaledNumer1 = obj1.numerator * obj2.denominator;
         int denom = obj1.denominator * obj2.denominator;
 
         return Rational(scaledNumer1 + scaledNumer2, denom);
     }
+
     Rational operator-(const Rational& obj1, const Rational& obj2)
     {
+        // brings upto same denominator equivalent for 'otherNumerator'
+        int scaledNumer1 = obj1.numerator * obj2.denominator;
+
         //Gets other obj numerator to be brought upto a same denominator equivalent
         int scaledNumer2 = obj1.denominator * obj2.numerator;
 
-        // brings upto same denominator equivalent for 'otherNumerator'
-        int scaledNumer1 = obj1.numerator * obj2.denominator;
         int denom = obj1.denominator * obj2.denominator;
 
-        return Rational(scaledNumer1 + scaledNumer2, denom);
+        return Rational(scaledNumer1 - scaledNumer2, denom);
     }
 
-Rational operator*(const Rational& obj1, const Rational& obj2)
-{
-    return Rational(obj1.numerator * obj2.numerator, obj1.denominator * obj2.denominator);
-}
-
-Rational operator/(const Rational& obj1, const Rational& obj2)
-{
-    if (obj2.numerator == 0)
+    Rational operator*(const Rational& obj1, const Rational& obj2)
     {
-        throw invalid_argument("Denominator cannot be zero: Devision operator");
+        return Rational(obj1.numerator * obj2.numerator, obj1.denominator * obj2.denominator);
     }
 
-    return Rational(obj1 * Rational(obj2.denominator, obj2.numerator));
-}
+    Rational operator/(const Rational& obj1, const Rational& obj2)
+    {
+        if (obj2.numerator == 0)
+        {
+            throw invalid_argument("Denominator cannot be zero: Devision operator");
+        }
+
+        return Rational(obj1 * Rational(obj2.denominator, obj2.numerator));
+    }
+
+    // Compares by cross-multiplying (no division, so no rounding or truncation).
+    // Valid because denominators are always positive, so the inequality never flips.
+    bool operator>(const Rational& obj1, const Rational& obj2)
+    {
+        // a * c
+        int obj1Result = (obj1.numerator * obj2.denominator); // (a/b) * (b*d) = a·d (the bs cancel)
+
+        // c * b
+        int obj2Result = (obj2.numerator * obj1.denominator); // (c/d) * (b*d) = c·b (the ds cancel)
+        return (obj1Result > obj2Result);
+    }
+
+    bool operator==(const Rational& obj1, const Rational& obj2)
+    {
+        int obj1Result = (obj1.numerator * obj2.denominator);
+
+        int obj2Result = (obj2.numerator * obj1.denominator);
+
+        return (obj1Result == obj2Result);
+    }
+
+bool operator<(const Rational& obj1, const Rational& obj2)
+    {
+        return (obj2 > obj1);
+    }
+
+    bool operator==(const Rational& obj1, const Rational& obj2);
+
 // ========================================= METHODS ========================================= //
 void Rational::set_value(const int& numer, const int& denom)
 {
