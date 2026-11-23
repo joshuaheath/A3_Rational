@@ -31,6 +31,8 @@ Rational::Rational(int numer, int denom)
 
 Rational::Rational(const string& text)
 {
+    cout<<" -- Rational String constructor -- "<<endl;
+
     if (!is_valid_number(text))
     {
         throw invalid_argument("Invalid number format");
@@ -40,8 +42,7 @@ Rational::Rational(const string& text)
     // If it cannot find the slash
     if (slash == string::npos)
     {
-        numerator = stoi(text);
-        denominator = 1;
+        Rational(stoi(text));
     }
     else
     {
@@ -60,6 +61,7 @@ Rational::Rational(const string& text)
 // ========================================= OVERLOADS ========================================= //
     Rational operator+(const Rational& obj1,const Rational& obj2)
     {
+        cout << " -- Operator Overload '+' -- " << endl;
         // brings upto same denominator equivalent for 'otherNumerator'
         int scaledNumer1 = obj1.numerator * obj2.denominator;
 
@@ -73,6 +75,8 @@ Rational::Rational(const string& text)
 
     Rational operator-(const Rational& obj1, const Rational& obj2)
     {
+        cout << " -- Operator Overload '-' -- " << endl;
+
         // brings upto same denominator equivalent for 'otherNumerator'
         int scaledNumer1 = obj1.numerator * obj2.denominator;
 
@@ -86,11 +90,15 @@ Rational::Rational(const string& text)
 
     Rational operator*(const Rational& obj1, const Rational& obj2)
     {
+        cout << " -- Operator Overload '*' -- " << endl;
+
         return Rational(obj1.numerator * obj2.numerator, obj1.denominator * obj2.denominator);
     }
 
     Rational operator/(const Rational& obj1, const Rational& obj2)
     {
+        cout << " -- Operator Overload '/' -- " << endl;
+
         if (obj2.numerator == 0)
         {
             throw invalid_argument("Denominator cannot be zero: Devision operator");
@@ -103,6 +111,8 @@ Rational::Rational(const string& text)
     // Valid because denominators are always positive, so the inequality never flips.
     bool operator>(const Rational& obj1, const Rational& obj2)
     {
+        cout << " -- Operator Overload '>' -- " << endl;
+
         // a * c
         int obj1Result = (obj1.numerator * obj2.denominator); // (a/b) * (b*d) = a·d (the bs cancel)
 
@@ -113,24 +123,33 @@ Rational::Rational(const string& text)
 
     bool operator==(const Rational& obj1, const Rational& obj2)
     {
+        cout << " -- Operator Overload '==' -- " << endl;
+
         int obj1Result = (obj1.numerator * obj2.denominator);
-
         int obj2Result = (obj2.numerator * obj1.denominator);
-
         return (obj1Result == obj2Result);
     }
 
-bool operator<(const Rational& obj1, const Rational& obj2)
+    bool operator<(const Rational& obj1, const Rational& obj2)
     {
+        cout << " -- Operator Overload '<' -- " << endl;
+
         return (obj2 > obj1);
     }
 
-    bool operator==(const Rational& obj1, const Rational& obj2);
+    ostream& operator<<(ostream& output, Rational& obj)
+    {
+        cout << " -- Operator Overload '<<' -- " << endl;
+
+        obj.normalize();
+        output << obj.numerator << "/" << obj.denominator << endl;
+        return output;
+    }
 
 // ========================================= METHODS ========================================= //
 void Rational::set_value(const int& numer, const int& denom)
 {
-
+    cout << "[DEBUG] Assigning Value to Rational number: " << numer << "/" << denom << endl;
     if (denom == 0)
     {
         throw invalid_argument("Denominator cannot be zero");
